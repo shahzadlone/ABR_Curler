@@ -3,7 +3,7 @@
 // =================================================================================================================================================================================================
 
 // *************************************************************************************************************************************************************************************************
-// Compile: gcc Curler.c -Llibs/ -Ithird_party -lxml2 -lcurl -o curler -Wl,-rpath=libs/
+// Compile: gcc Curler.c -Llibs/ -Ithird_party -lxml2 -lcurl -o curler -Wl,-rpath=libs/ && echo $?
 // *************************************************************************************************************************************************************************************************
 
 // #####[ INCLUDES ]#####
@@ -19,7 +19,6 @@
 #include "libxml/parser.h"
 #include "libxml/tree.h"
 // ######################
-
 #define URLS_BUFFER 200  
 #define MAX_CURL_TIME 5L // If stuck on a URL while curling for 5 seconds, then move on to the next URL to curl.
 
@@ -39,21 +38,26 @@
 void PrintStats(int worked, int total) {
     printf( "\x1B[36m=========================================\n"); 
     printf( "Done Running the Script on all the URLs:\n"); 
-    printf("%d out of %d MPDs are up.\n\x1B[0m", worked, total);
+    printf("%d out of %d MPDs are up.\n", worked, total);
+    printf( "=========================================\x1B[0m\n"); 
 }
 
 bool CheckCurlValidOrNot(xmlDoc *doc) {
-	xmlNodePtr node = NULL;
-	node = xmlDocGetRootElement(doc);
+    xmlNodePtr node = NULL;
+    node = xmlDocGetRootElement(doc);
 
-	if (!node) {
-		//printf("Unable to parse mpd - missing root node\n");
-		return false;
-	}
-	
-	if (node->type != XML_ELEMENT_NODE || xmlStrcmp(node->name, (const xmlChar *)"MPD")) {
-		//printf("Unable to parse mpd - wrong root node name[%s] type[%d]\n", node->name, (int)node->type);
-		return false;
+    if (!node) {
+        #ifdef PRINTING
+        printf("Unable to parse mpd - missing root node\n");
+        #endif // PRINTING
+        return false;
+    }
+
+    if (node->type != XML_ELEMENT_NODE || xmlStrcmp(node->name, (const xmlChar *)"MPD")) {
+        #ifdef PRINTING
+        printf("Unable to parse mpd - wrong root node name[%s] type[%d]\n", node->name, (int)node->type);
+        #endif // PRINTING
+        return false;
 	}
 	
 	return true;
@@ -168,12 +172,24 @@ int main(int argc, char *argv[]) {
         data = handleUrl(url);
     
         if(data) {
-            //printf("%s\n", data);
-            //printf("Reading XML ... \n");
+
+            #ifdef PRINTING
+            printf("%s\n", data);
+            printf("Reading XML ... \n");
+            #endif // PRINTING
+
             doc = xmlReadMemory(data, strlen(data), url, NULL, 0);
-            //printf("Reading XML ... Done\n");
+
+            #ifdef PRINTING
+            printf("Reading XML ... Done\n");
+            #endif // PRINTING
+
             bool result = CheckCurlValidOrNot(doc); 
-            //printf("Checking if Curl is Valid... \n");
+
+            #ifdef PRINTING
+            printf("Checking if Curl is Valid... \n");
+            #endif // PRINTING
+
             if ( result == true ) { 
                 printf("%sURL:[ %s ] , is up!\n%s", green_str, url, normal_str); 
                 ++(urlsWorking);
@@ -181,7 +197,10 @@ int main(int argc, char *argv[]) {
             else if ( result == false ) { 
                 printf("%sURL:[ %s ] , is down!\n%s", red_str, url, normal_str); 
             }
-            //printf("Checking if Curl is Valid... Done\n");
+
+            #ifdef PRINTING
+            printf("Checking if Curl is Valid... Done\n");
+            #endif // PRINTING
     
             free(data);
         }	
