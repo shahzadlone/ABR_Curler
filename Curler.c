@@ -1,4 +1,4 @@
-// ================================================================[ Curler - to Curl a bunch of URLs and Check which ones are UP ]=================================================================
+// =====================================================[ Curler - to Curl a bunch of ABR(MPEG-DASH and HLS) URLs and Check which ones are UP ]=====================================================
 //                                                                              @ShahzadLone for help if needed.
 // =================================================================================================================================================================================================
 
@@ -15,9 +15,9 @@
 // # include <inttypes.h>
 // # include <stdint.h>
 // # include <time.h>
-#include "curl/curl.h"
-#include "libxml/parser.h"
-#include "libxml/tree.h"
+#include <curl/curl.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 // ######################
 #define URLS_BUFFER 200  
 #define MAX_CURL_TIME 5L // If stuck on a URL while curling for 5 seconds, then move on to the next URL to curl.
@@ -35,14 +35,59 @@
 #define white_str  "\x1B[37m"
 
 
-void PrintStats(int worked, int total) {
+void PrintStats(int worked, int total, int hlsWorked, int dashWorked) {
     printf( "\x1B[36m=========================================\n"); 
     printf( "Done Running the Script on all the URLs:\n"); 
-    printf("%d out of %d MPDs are up.\n", worked, total);
+    printf("%d out of %d URLs are up.\n", worked, total);
+
+    // Print HLS STATS
+    if ( hlsWorked <= 0 ) {
+        printf("NO HLS URL is up.\n");
+    }
+    else if ( hlsWorked == 1 ) {
+        printf("1 HLS URL is up.\n");
+    }
+    else {
+        printf("%d HLS URLs are up.\n", hlsWorked);
+    }
+
+    // Print MPD STATS
+    if ( dashWorked <= 0 ) {
+        printf("NO DASH URL is up.\n");
+    }
+    else if ( dashWorked == 1 ) {
+        printf("1 DASH URL is up.\n");
+    }
+    else {
+        printf("%d DASH URLs are up.\n", dashWorked);
+    }   
+    
     printf( "=========================================\x1B[0m\n"); 
 }
 
-bool CheckCurlValidOrNot(xmlDoc *doc) {
+// Returns true if this URL is a valid HLS (is UP). Otherwise returns false.
+bool CheckIfValidM3U(char * curl_output) {
+    
+   if (!curl_output) {
+        #ifdef PRINTING
+        printf("Unable to parse m3u - not enough information after curling \n");
+        #endif // PRINTING  
+        return( false );
+   } 
+
+    // Check If HLS is UP (is valid HLS URL or no).
+    else if (strncmp(curl_output, "#EXTM3U", 7) == 0) {
+        return( true ); 
+    }
+
+    else { // If Not a Valid HLS URL.
+        return( false );
+    }
+	
+}
+
+// Returns true if this URL is a valid DASH (is UP). Otherwise returns false.
+bool CheckIfValidMPD(xmlDoc *doc) {
     xmlNodePtr node = NULL;
     node = xmlDocGetRootElement(doc);
 
@@ -140,6 +185,8 @@ int main(int argc, char *argv[]) {
     }
 
     int urlsWorking = 0;
+    int mpdsWorking = 0;
+    int m3usWorking = 0;
 
 	char* urlsFileName ;
 	urlsFileName = argv[1];
@@ -174,28 +221,32 @@ int main(int argc, char *argv[]) {
         if(data) {
 
             #ifdef PRINTING
-            printf("%s\n", data);
-            printf("Reading XML ... \n");
-            #endif // PRINTING
-
-            doc = xmlReadMemory(data, strlen(data), url, NULL, 0);
-
-            #ifdef PRINTING
-            printf("Reading XML ... Done\n");
-            #endif // PRINTING
-
-            bool result = CheckCurlValidOrNot(doc); 
-
-            #ifdef PRINTING
             printf("Checking if Curl is Valid... \n");
             #endif // PRINTING
+            
+            // Check if HLS is UP.
+            bool hlsResult = CheckIfValidM3U(data);
 
-            if ( result == true ) { 
-                printf("%sURL:[ %s ] , is up!\n%s", green_str, url, normal_str); 
+            // XML Needed to Check for MPD Validation.
+            doc = xmlReadMemory(data, strlen(data), url, NULL, 0);
+            // Check if DASH is UP.
+            bool dashResult = CheckIfValidMPD(doc); 
+
+            if ( hlsResult == true ) { 
+                printf("%sURL:[ %s ] ~~~~~ M3U(HLS) is UP!\n%s", green_str, url, normal_str); 
+                ++(m3usWorking);
                 ++(urlsWorking);
             }
-            else if ( result == false ) { 
-                printf("%sURL:[ %s ] , is down!\n%s", red_str, url, normal_str); 
+            else if ( dashResult == true ) { 
+                printf("%sURL:[ %s ] ~~~~~ MPD(DASH) is UP!\n%s", green_str, url, normal_str); 
+                ++(mpdsWorking);
+                ++(urlsWorking);
+            }
+            else if ( ( hlsResult == false )  &&  ( dashResult == false ) ) { 
+                printf("%sURL:[ %s ] ~~~~~ is DOWN!\n%s", red_str, url, normal_str); 
+            }
+            else {
+                printf("%sRARE CASE HIT TALK TO SHAHZAD(shahzadlone@gmail.com)\n%s", blue_str, normal_str); 
             }
 
             #ifdef PRINTING
@@ -210,7 +261,7 @@ int main(int argc, char *argv[]) {
     } // End of For-Loop.
 
     // Print the Stats.
-    PrintStats(urlsWorking, totalUrlCount);
+    PrintStats(urlsWorking, totalUrlCount, m3usWorking, mpdsWorking);
 	
     return 0;
 }
