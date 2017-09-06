@@ -1,5 +1,4 @@
 # MPEG-DASH Curler (Check if MPDs are Up)" 
-========================
 
 ------------------------
 Builds:
@@ -23,6 +22,7 @@ Examples:
     [ ./curler URL_List 2>/dev/null ] (Try this for a cleaner output)
 
 Note: If curling takes more than 5 seconds for any URL, program shows it's down. (Easily Configurable)
+
 ![Sample Output](/image/Example.PNG?raw=true)
 
 ------------------------
