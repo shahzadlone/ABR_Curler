@@ -1,4 +1,4 @@
-# ABR Curler 
+# ABR (Adaptive Bitrate Streaming) Curler 
 Curls and Checks any MPEG-DASH(Dynamic Adaptive Streaming over HTTP) and HLS(HTTP Live Streaming) URLs to see if they are up or not.
 
 ------------------------
