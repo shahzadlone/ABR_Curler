@@ -27,5 +27,5 @@ Note: If curling takes more than 5 seconds for any URL, program shows it's down.
 ------------------------
 Extra:
 ------------------------
-    - Add ```2>/dev/null``` to omit the std error output and get a cleaner output.
-    - Use ```sort URL_List | uniq --count``` to find if there are duplicates.
+- Add ```2>/dev/null``` to omit the std error output and get a cleaner output.
+- Use ```sort URL_List | uniq --count``` to find if there are duplicates.
