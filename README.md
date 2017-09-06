@@ -15,9 +15,6 @@ Takes one argument: [Path-To-File-With-The-URLS]
 ```
     WHERE:
           [Path-To-File-With-The-URLS]: path to the file that contains all the URLs to the MPDs on seperate lines.
-    TIP:
-        - Add '2>/dev/null' to omit the std error output and get a cleaner output.
-
 
 ------------------------
 Examples:
@@ -27,3 +24,8 @@ Examples:
 
 Note: If curling takes more than 5 seconds for any URL, program shows it's down. (Easily Configurable)
 
+------------------------
+Extra:
+------------------------
+    - Add `2>/dev/null` to omit the std error output and get a cleaner output.
+    - Use `sort URL_List | uniq --count` to find if there are duplicates.
