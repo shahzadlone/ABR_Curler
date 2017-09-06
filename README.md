@@ -1,4 +1,5 @@
-# ABR Curler - Curls and Checks any MPEG-DASH(Dynamic Adaptive Streaming over HTTP) and HLS(HTTP Live Streaming) URLs to see if they are up or not.
+# ABR Curler 
+Curls and Checks any MPEG-DASH(Dynamic Adaptive Streaming over HTTP) and HLS(HTTP Live Streaming) URLs to see if they are up or not.
 
 ------------------------
 Builds:
@@ -34,5 +35,6 @@ Extra:
 ------------------------
 FAQ:
 ------------------------
-Q1) If Compilation Gives Some RTMP Linker Errors.
+- Q1) If Compilation Gives Some RTMP Linker Errors.
     Try ```sudo ln -s /usr/lib/x86_64-linux-gnu/librtmp.so.1 /usr/lib/x86_64-linux-gnu/librtmp.so.0```
+
