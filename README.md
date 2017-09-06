@@ -18,8 +18,8 @@ Takes one argument: [Path-To-File-With-The-URLS]
 ------------------------
 Examples:
 ------------------------
-    [ ./curler URL_List ]
-    [ ./curler URL_List 2>/dev/null ] (Try this for a cleaner output)
+    [ ./curler URLs ]
+    [ ./curler URLs 2>/dev/null ] (Try this for a cleaner output)
 
 Note: If curling takes more than 5 seconds for any URL, program shows it's down. (Easily Configurable)
 
