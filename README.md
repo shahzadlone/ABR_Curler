@@ -31,3 +31,8 @@ Extra:
 - Add ```2>/dev/null``` to omit the std error output and get a cleaner output.
 - Use ```sort URLs | uniq --count``` to find if there are duplicates.
 
+------------------------
+FAQ:
+------------------------
+- Q1) While Compilation Getting Some RTMP Linker Errors.
+Try ```sudo ln -s /usr/lib/x86_64-linux-gnu/librtmp.so.1 /usr/lib/x86_64-linux-gnu/librtmp.so.0```
