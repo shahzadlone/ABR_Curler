@@ -20,7 +20,7 @@
 #include <libxml/tree.h>
 // ######################
 #define URLS_BUFFER 1000  
-#define MAX_CURL_TIME 5L // If stuck on a URL while curling for 5 seconds, then move on to the next URL to curl.
+#define MAX_CURL_TIME 3L // If stuck on a URL while curling then move on to the next URL to curl if these many seconds elapsed.
 
 // Defines to assist in printing in different colors. 
 // Note: Important to have %s where you want to initiate the color change
@@ -63,6 +63,18 @@ void PrintStats(int worked, int total, int hlsWorked, int dashWorked) {
     }   
     
     printf( "=========================================\x1B[0m\n"); 
+}
+
+// Return false if not a URL and true otherwise.
+bool isUrl(char * lineToCheck) { 
+    
+    if( ( strncmp( lineToCheck, "www.", 4 ) == 0 ) ||
+        ( strncmp( lineToCheck, "http://", 7 ) == 0 )
+      ) {
+        return (true);
+    }
+
+    return(false);
 }
 
 // Returns true if this URL is a valid HLS (is UP). Otherwise returns false.
@@ -195,24 +207,33 @@ int main(int argc, char *argv[]) {
     FILE * URL_file = NULL; 
     URL_file  = fopen(urlsFileName , "r");
 
-    int urlCountIndex = 0;
-    while(fgets(line[urlCountIndex], URLS_BUFFER, URL_file)) {
+    int lineCountIndex = 0;
+    while(fgets(line[lineCountIndex], URLS_BUFFER, URL_file)) {
         // get rid of ending '\n' from fgets
-        line[urlCountIndex][strlen(line[urlCountIndex]) - 1] = '\0';
-        ++(urlCountIndex);
+        line[lineCountIndex][strlen(line[lineCountIndex]) - 1] = '\0';
+        ++(lineCountIndex);
     }
 
-    const int totalUrlCount = urlCountIndex;
 
-    // Curl all the URLs
-    for(urlCountIndex = 0; urlCountIndex < totalUrlCount; ++(urlCountIndex)) {
-	
+    int totalUrlCount = 0;
+    const int totalLineCount = lineCountIndex;
+    // Curl all the URLs and print all non-URLs.
+    for(lineCountIndex = 0; lineCountIndex < totalLineCount; ++(lineCountIndex)) {
+
+        char* url = line[lineCountIndex];
+        // Check if url is valid.
+        if (isUrl(url ) == true) {
+            ++(totalUrlCount );
+        }
+        else { // Not a URL then must be a comment. So just print it.
+            printf("\n%s***** Non-URL Comment Encountered in File: %s *****%s\n", yellow_str , line[lineCountIndex], normal_str); 
+            continue;
+        }	
+
         CURL *curl;
 	    CURLcode res;
 	    char* data;
 	    xmlDoc *doc = NULL;
-
-        char* url = line[urlCountIndex];
 
     	printf("Reading from %s\n", url);
        

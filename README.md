@@ -22,7 +22,7 @@ Examples:
     [ ./curler URLs ]
     [ ./curler URLs 2>/dev/null ] (Try this for a cleaner output)
 
-Note: If curling takes more than 5 seconds for any URL, program shows it's down. (Easily Configurable)
+Note: If curling takes more than 3 seconds for any URL, program shows it's down. (Easily Configurable)
 
 ![Sample Output](/image/Example.PNG?raw=true)
 
