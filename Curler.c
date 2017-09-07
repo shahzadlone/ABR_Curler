@@ -19,7 +19,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 // ######################
-#define URLS_BUFFER 200  
+#define URLS_BUFFER 1000  
 #define MAX_CURL_TIME 5L // If stuck on a URL while curling for 5 seconds, then move on to the next URL to curl.
 
 // Defines to assist in printing in different colors. 
