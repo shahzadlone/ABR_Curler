@@ -31,6 +31,7 @@ Extra:
 ------------------------
 - Add ```2>/dev/null``` to omit the std error output and get a cleaner output.
 - Use ```sort URLs | uniq --count``` to find if there are duplicates.
+- If a line in the input file is not a URL then it is printing as a comment. 
 
 ------------------------
 FAQ:
