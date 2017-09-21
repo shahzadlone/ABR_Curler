@@ -15,24 +15,24 @@
 // # include <inttypes.h>
 // # include <stdint.h>
 // # include <time.h>
-#include <curl/curl.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
+# include <curl/curl.h>
+# include <libxml/parser.h>
+# include <libxml/tree.h>
 // ######################
-#define URLS_BUFFER 1000  
-#define MAX_CURL_TIME 3L // If stuck on a URL while curling then move on to the next URL to curl if these many seconds elapsed.
+# define URLS_BUFFER 1000  
+# define MAX_CURL_TIME 3L // If stuck on a URL while curling then move on to the next URL to curl if these many seconds elapsed.
 
 // Defines to assist in printing in different colors. 
 // Note: Important to have %s where you want to initiate the color change
 // Example: printf( "%sHello, Shahzad\n", blue_str );
-#define normal_str  "\x1B[0m"
-#define red_str  "\x1B[31m"
-#define green_str  "\x1B[32m"
-#define yellow_str  "\x1B[33m"
-#define blue_str  "\x1B[34m"
-#define mag_str  "\x1B[35m"
-#define cyan_str  "\x1B[36m"
-#define white_str  "\x1B[37m"
+# define normal_str  "\x1B[0m"
+# define red_str  "\x1B[31m"
+# define green_str  "\x1B[32m"
+# define yellow_str  "\x1B[33m"
+# define blue_str  "\x1B[34m"
+# define mag_str  "\x1B[35m"
+# define cyan_str  "\x1B[36m"
+# define white_str  "\x1B[37m"
 
 
 void PrintStats(int worked, int total, int hlsWorked, int dashWorked) {
