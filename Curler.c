@@ -11,10 +11,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <stdbool.h>
-// # include <pthread.h>
-// # include <inttypes.h>
-// # include <stdint.h>
-// # include <time.h>
 # include <curl/curl.h>
 # include <libxml/parser.h>
 # include <libxml/tree.h>
