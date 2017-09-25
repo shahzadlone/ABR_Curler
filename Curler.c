@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
             ++(totalUrlCount );
         }
         else { // Not a URL then must be a comment. So just print it.
-            printf("\n%s***** Non-URL Comment Encountered in File: %s *****%s\n", yellow_str , line[lineCountIndex], normal_str); 
+            printf("\n%s Comment: [ %s ] %s\n", yellow_str , line[lineCountIndex], normal_str); 
             continue;
         }	
 
