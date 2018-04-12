@@ -36,6 +36,6 @@ Extra:
 ------------------------
 FAQ:
 ------------------------
-Q1) If Compilation Gives Some RTMP Linker Errors.
+Q1) If Compilation Gives Some RTMP Linker Errors (shouldn't happen anymore).
 Try ```sudo ln -s /usr/lib/x86_64-linux-gnu/librtmp.so.1 /usr/lib/x86_64-linux-gnu/librtmp.so.0```
 
